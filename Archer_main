@@ -1,0 +1,98 @@
+package me.TreeOfBread;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Archer extends JavaPlugin{
+	
+	public static int classLevel = 1; 
+	public static boolean picked = false;
+	
+	public void onEnable(){
+  		
+		new playerListener(this); 
+		
+		ItemStack arrow = new ItemStack(Material.ARROW);
+   	  	
+  		ShapedRecipe powerArrow = new ShapedRecipe(arrow);
+
+  			powerArrow.shape(
+  						"@##",
+  						"@##",
+  					    "###");
+
+  			powerArrow.setIngredient('@', Material.STICK);
+  			powerArrow.setIngredient('#', Material.AIR);
+  			
+  				getServer().addRecipe(powerArrow);
+  				
+  	
+  				
+  		ItemStack bow = new ItemStack(Material.BOW);
+  		   	  	
+  		ShapedRecipe powerBow = new ShapedRecipe(bow);
+
+  		  		  		powerBow.shape(
+  		  		  				"#@#",
+  		  		  				"@##",
+  		  		  			    "#@#");
+
+  		  		  			powerBow.setIngredient('@', Material.STICK);
+  		  		  			powerBow.setIngredient('#', Material.AIR);
+  		  			
+  		  				getServer().addRecipe(powerBow);
+	}
+	
+	@Override
+	public void onDisable(){
+		
+		
+	}
+
+			public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+  		
+				
+					if(cmd.getName().equalsIgnoreCase("levelup") && sender instanceof Player){
+						
+						Player player = (Player) sender;
+			  			
+						
+						if(classLevel < 10){
+							player.sendMessage(ChatColor.GREEN + "You are not a high enough level to rank up!");
+						}
+						
+						else if(classLevel > 10){		
+				  			System.out.println(ChatColor.AQUA + "hello World");	
+				  			player.sendMessage(ChatColor.AQUA + "Congrats!, you have leveled up your class\nYou can now craft Spectral Arrows!");
+				  			picked = true;
+				  			
+				  		ItemStack arrow1 = new ItemStack(Material.SPECTRAL_ARROW);
+				  		   	  	
+				   		ShapedRecipe powerArrow1 = new ShapedRecipe(arrow1);
+
+				  		  		powerArrow1.shape(
+				  		  				"@@#",
+				  		  				"@##",
+				  		  			    "@##");
+
+				  		  			powerArrow1.setIngredient('@', Material.STICK);
+				  		  			powerArrow1.setIngredient('#', Material.AIR);
+				  			
+				  				getServer().addRecipe(powerArrow1);
+				  				
+				  		}
+						
+					}
+					return false;
+			}
+	
+	
+	
+}
+ 
