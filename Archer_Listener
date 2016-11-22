@@ -1,0 +1,38 @@
+package me.TreeOfBread;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerExpChangeEvent;
+
+public class playerListener implements Listener{
+
+	int numHolder = 0;
+	
+	public playerListener(Archer plugin) {
+		// TODO Auto-generated constructor stub
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler
+	public void onExp(PlayerExpChangeEvent e) {
+	
+		Player player = e.getPlayer();
+		
+		numHolder++;
+		Archer.classLevel++;
+		Archer.classLevel = numHolder;
+		
+		if(Archer.classLevel > 10 && Archer.picked == false){
+		
+			player.sendMessage(ChatColor.YELLOW + "Your class is now able to level up!");
+			player.sendMessage(ChatColor.YELLOW + "\nType [/levelup]\n");
+			
+		}
+
+
+	}
+
+	
+}
