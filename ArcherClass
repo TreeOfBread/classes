@@ -1,0 +1,78 @@
+package Listeners;
+
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerExpChangeEvent;
+
+import Classes.main;
+
+public class ArcherClass implements Listener{
+
+	int numHolder = 0;
+	private boolean sentOnce = false;
+	private boolean sentOnce2 = false;
+	
+	public ArcherClass(main plugin) {
+		// TODO Auto-generated constructor stub
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler
+	public void onExp(PlayerExpChangeEvent e) {
+	
+		Player player = e.getPlayer();
+
+		numHolder++;
+		main.classChangeLevel += numHolder;
+		
+		if(main.classChangeLevel > 20 && main.classChangeLevel < 40 && sentOnce == false && main.archer == true){		
+  			player.sendMessage(ChatColor.AQUA + "Congrats!, your class leveled up!\nYou can now craft Spectral Arrows!");
+  			
+  			main.classLevel ++;
+  					
+  			sentOnce = true;
+  			
+		}
+		if(main.classChangeLevel > 40 && sentOnce2 == false && main.archer == true){
+			player.sendMessage(ChatColor.AQUA + "Congrats!, your class leveled up!\nYour basic arrows not make tiny explostions on impact");
+			
+			main.classLevel++;
+			
+			sentOnce2 = true;
+			
+		}
+		
+		
+	}
+	@EventHandler
+	public void p(ProjectileHitEvent event){
+		Projectile proj = event.getEntity();
+		if(proj instanceof Arrow && main.classLevel == 3){
+			Arrow arrow = (Arrow) proj;
+			if(arrow.getShooter()instanceof Player){
+				event.getEntity().getWorld().createExplosion(event.getEntity().getLocation(), 1);
+				
+			}
+			
+			
+		}
+		
+		
+		
+	}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+}
