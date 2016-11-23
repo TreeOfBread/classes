@@ -1,0 +1,134 @@
+package Classes;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import Listeners.ArcherClass;
+import Listeners.onJoinEvent;
+
+public class main extends JavaPlugin {
+	
+	
+	public static int classChangeLevel = 1;
+	public static int classLevel = 1; 
+	public static boolean picked = false;
+	public static boolean archer = false;
+	public static boolean knight = false;
+	public static boolean mage = false;
+	
+	public String characterClass;
+	
+	public void onEnable(){
+		new ArcherClass(this); 
+		new onJoinEvent(this);
+		getServer();
+	}
+	@Override
+	public void onDisable(){
+		
+		
+	}
+
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+		
+		Player player = (Player) sender;
+		
+		if(cmd.getName().equalsIgnoreCase("classes") && sender instanceof Player){
+				
+				
+				player.sendMessage(ChatColor.GREEN + "Archer - has bow");
+				player.sendMessage(ChatColor.GREEN + "Knight - has sword");
+				player.sendMessage(ChatColor.GREEN + "Mage - has sad stick");
+			
+		}
+		
+		
+		
+		if(cmd.getName().equalsIgnoreCase("classlevel") && sender instanceof Player){
+			if(picked == true){
+			
+			player.sendMessage(ChatColor.GREEN + "Your class level is " + classLevel);
+			}
+			else if(picked == false){
+				player.sendMessage(ChatColor.RED + "You do have not a class yet!");
+			}
+
+		}
+		
+		
+		if(cmd.getName().equalsIgnoreCase("archer") && sender instanceof Player && picked == false){
+			
+			archer = true;
+			picked = true;
+			
+			/////////////////////////////////////////////////Start Archer crafting
+			if(archer == true){
+				
+				
+				ItemStack arrow = new ItemStack(Material.ARROW);
+		   	  	
+		  		ShapedRecipe powerArrow = new ShapedRecipe(arrow);
+
+		  			powerArrow.shape(
+		  						"@##",
+		  						"@##",
+		  					    "###");
+
+		  			powerArrow.setIngredient('@', Material.STICK);
+		  			powerArrow.setIngredient('#', Material.AIR);
+		  			
+		  				getServer().addRecipe(powerArrow);
+		  				
+		  	
+		  				
+		  		ItemStack bow = new ItemStack(Material.BOW);
+		  		   	  	
+		  		ShapedRecipe powerBow = new ShapedRecipe(bow);
+
+		  		  		  		powerBow.shape(
+		  		  		  				"#@#",
+		  		  		  				"@##",
+		  		  		  			    "#@#");
+
+		  		  		  			powerBow.setIngredient('@', Material.STICK);
+		  		  		  			powerBow.setIngredient('#', Material.AIR);
+		  		  			
+		  		  				getServer().addRecipe(powerBow);
+		  		  				player.sendMessage(ChatColor.AQUA + "Congrats! You are now the Archer class.\nPlease read your book to gain more information");
+			}	
+			
+			
+			if(archer == true && classChangeLevel > 20){
+				
+		  		ItemStack arrow1 = new ItemStack(Material.SPECTRAL_ARROW);
+		  		   	  	player.sendMessage(classChangeLevel + " hi");
+		   		ShapedRecipe powerArrow1 = new ShapedRecipe(arrow1);
+
+		  		  		powerArrow1.shape(
+		  		  				"@@#",
+		  		  				"@##",
+		  		  			    "@##");
+
+		  		  			powerArrow1.setIngredient('@', Material.STICK);
+		  		  			powerArrow1.setIngredient('#', Material.AIR);
+		  			
+		  				getServer().addRecipe(powerArrow1);
+
+		}
+		}
+	
+
+
+		
+	
+		
+		return false;
+	}
+
+}
