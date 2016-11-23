@@ -1,0 +1,116 @@
+package me.firstflames;
+
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class EventHandle extends JavaPlugin implements Listener{
+
+            private static Connection connection;
+            
+            public void onEnable(){
+            	getServer().getPluginManager().registerEvents(this, this);
+            }
+            
+            public void onDisable(){
+            	try {
+					if(connection != null || !connection.isClosed()){
+						connection.close();
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+ 
+            public synchronized static void openConnection(){
+            	try{
+            		connection = DriverManager.getConnection("jdbc:mysql://	66.85.144.162:3306/mcph127666", "mcph127666", "061d3158f8");
+            		
+            	}
+            	catch(Exception e){
+            		e.printStackTrace();
+            	}
+            	
+            }
+            public synchronized static void closedConnection(){
+            	try{
+            		connection.close();
+            		
+            	}
+            	catch(Exception e){
+            		e.printStackTrace();
+            	}
+            	
+            }
+            public synchronized static boolean playerDataContainsPlayer(Player player){
+            	try{
+            		PreparedStatement sql = connection.prepareStatement("SELECT * FROM 'player_data' WHERE player = ?; ");
+            			sql.setString(1, player.getName());
+            		ResultSet resultSet = sql.executeQuery();
+            		boolean containsPlayer = resultSet.next();
+            		
+            		sql.close();
+            		resultSet.close();
+            		
+            		return containsPlayer;
+            		
+            		
+            	}catch(Exception e){
+            		e.printStackTrace();
+            		return false;
+            	}
+            }
+            
+            @EventHandler
+            public void onPlayerLogin(PlayerLoginEvent event){
+            		
+            	openConnection();
+            	try{
+            		int previousLogins = 0;
+            		
+            		if(playerDataContainsPlayer (event.getPlayer())){
+            			PreparedStatement sql = connection.prepareStatement("SELECT logins FROM 'player_data' WHERE player = ?;");
+            			sql.setString(1, event.getPlayer().getName());
+            			
+            			ResultSet result = sql.executeQuery();
+            			result.next();
+            			
+            			previousLogins = result.getInt("logins");
+            			
+            			PreparedStatement loginsUpdate = connection.prepareStatement("UPDATE 'player_data' SET logins=? WHERE player = ?");
+            			loginsUpdate.setInt(1, previousLogins+1);
+            			loginsUpdate.setString(2,  event.getPlayer().getName());
+            			loginsUpdate.executeUpdate();
+            			
+            			loginsUpdate.close();
+            			sql.close();
+            			result.close();
+            			
+            		}else {
+            			PreparedStatement newPlayer = connection.prepareStatement("INSERT INTO 'player_data' values(?,0,0,1);");
+            			
+            			newPlayer.setString(1,  event.getPlayer().getName());
+            			newPlayer.execute();
+            			newPlayer.close();
+            		}
+            		
+            		
+            	}catch(Exception e){
+            		e.printStackTrace();
+            	}finally{
+            		closedConnection();
+            	}
+            	
+            }
+}
+
