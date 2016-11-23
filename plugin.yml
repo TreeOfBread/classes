@@ -1,0 +1,17 @@
+name: AetherFactions
+main: Classes.main
+version: 1.11
+commands:
+   classes:
+      description: All the classes.
+   archer:
+      description: has bow.
+   knight:
+      description: adad.
+   classLevel:
+      description: What level you are.
+   particle:
+      description: creates particle.
+      
+      
+      
