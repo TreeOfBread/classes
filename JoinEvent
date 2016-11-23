@@ -1,0 +1,46 @@
+package Listeners;
+
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+
+import Classes.main;
+
+public class onJoinEvent implements Listener{
+
+
+	public onJoinEvent(main plugin) {
+		// TODO Auto-generated constructor stub
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+	
+	@EventHandler
+	public void onPlayerEvent(PlayerJoinEvent e){
+		
+		Player player1 = e.getPlayer();
+
+		e.setJoinMessage(ChatColor.AQUA + "Welcome, " + player1.getName() + ", to Aether!");
+		
+		//if new player
+		if(player1.hasPlayedBefore() == false || main.picked == false){
+			player1.sendMessage(ChatColor.GREEN +"As you are new player, have a free cake\nYou also get to pick a starting class!");
+			
+			//adds 64 cakes to player inventory
+			player1.getInventory().addItem(new ItemStack(Material.APPLE, 1));
+			
+			player1.sendMessage(ChatColor.GREEN + "Please choose from\n[/Archer][/Knight][/Mage]");
+					
+					
+				
+		}
+		
+		
+	
+	}
+	
+	
+}
